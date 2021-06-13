@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Test</h2>
+
+<p id="demo"></p>
+
+<label for="stableSelect">Choisis un stablecoin:</label>
+
+<select  id="stableSelect" onchange="selectFunction()">
+    <option value="">...</option>
+    <option value="Ampleforth">Ampleforth</option>
+    <option value="Tether">Tether</option>
+</select>
+
+<script>
+var selectRemove = true;
+function selectFunction() {
+    if (selectRemove) {
+        document.getElementById("stableSelect").remove(0);
+        selectRemove = false;
+    }
+    var x = document.getElementById("stableSelect").value;
+    document.getElementById("demo").innerHTML = x;
+}
+
+</script>
+
+</body>
+</html> 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Valeurs</h2>
+
+<script>
+
+    var c;
+    var v = 1;
+    var k = 0;
+
+    for (let i = 0; i < 100; i++) {
+        c = Math.random()*0.5 - 0.25 + k;
+        if (c < 0) {
+            v += c;
+            k += 0.01;
+        }
+        if (c >= 0) {
+            v += c;
+            k -= 0.01;
+        }
+        document.writeln(Number.parseFloat(v).toPrecision(4) +",");
+    }
+
+</script>
+
+</body>
+</html> 
