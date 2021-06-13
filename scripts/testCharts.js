@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<button onclick="dessiner()">Lancer le graphique</button>
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src='scripts/testApi.js'></script>
-
-<script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js'></script>
-<canvas id="graphique" width="400" height="130" aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
-<script>
-
 function dessiner(){
     var ctx = document.getElementById('graphique').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -38,7 +25,3 @@ function dessiner(){
         }
     });
 }
-</script>
-
-</body>
-</html> 

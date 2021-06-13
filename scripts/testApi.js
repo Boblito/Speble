@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-
 async function getData() {
   try {
     var response = await axios.get('https://api.coingecko.com/api/v3/coins/ampleforth/market_chart?vs_currency=usd&days=700&interval=daily');
@@ -46,8 +39,3 @@ function formatDate(date) {
 
 console.log(dates);
 console.log(prix);
-
-</script>
-
-</body>
-</html> 
