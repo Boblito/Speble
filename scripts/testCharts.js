@@ -34,6 +34,7 @@ function dessiner(){
                     ticks: {
                         beginAtZero: true,
                         type: 'time',
+                        suggestedMax : 2
                     }
                 }]
             }
