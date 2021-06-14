@@ -10,7 +10,18 @@ var myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
+        datasets : [{
+            label: 'Valeur de référence',
+            data: [10, 10, 10, 10 ,10, 10],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0)',
+            ],
+            borderColor: [
+                'rgba(0,0,0,1)',
+            ],
+            borderWidth: 1,
+            pointRadius: 0
+        }, {
             label: '# of Votes',
             data: [12, 19, 3, 5, 2, 3],
             backgroundColor: [
@@ -19,14 +30,18 @@ var myChart = new Chart(ctx, {
             borderColor: [
                 'rgba(255, 99, 132, 1)',
             ],
-            borderWidth: 1
+            borderWidth: 1,
+            pointRadius: 0
         }]
     },
     options: {
         scales: {
-            y: {
-                beginAtZero: true
+          yAxes: [{
+            ticks: {
+                beginAtZero: true,
+                type: 'time',
             }
+          }]
         }
     }
 });

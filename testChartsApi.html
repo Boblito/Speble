@@ -2,7 +2,20 @@
 <html>
 <body>
 
-<button onclick="dessiner()">Lancer le graphique</button>
+<select  id="stableSelect" onchange="requeteGecko()">
+    <option value="Nulle" selected disabled hidden>Choisis un stablecoin</option>
+    <option value="ampleforth">Ampleforth</option>
+    <option value="xbtc">xBTC</option>
+</select>
+
+<div>
+    <input type="radio" id="radio1" name="durée" onchange="requeteGecko()" value="1" checked>
+    <label for="male">Jour</label><br>
+    <input type="radio" id="radio30" name="durée" onchange="requeteGecko()" value="30">
+    <label for="female">Mois</label><br>
+    <input type="radio" id="radio365" name="durée" onchange="requeteGecko()"value="365">
+    <label for="other">Année</label>
+</div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src='scripts/testApi.js'></script>
@@ -26,18 +39,34 @@ function dessiner(){
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                 ],
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0
+            }, {
+                label: 'Valeur de référence',
+                data: vRef,
+                backgroundColor: [
+                    'rgba(0, 0, 0, 0)',
+                ],
+                borderColor: [
+                    'rgba(0,0,0,1)',
+                ],
+                borderWidth: 1,
+                pointRadius: 0
             }]
         },
         options: {
             scales: {
-                y: {
-                    beginAtZero: true,
-                }
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        type: 'time',
+                    }
+                }]
             }
         }
     });
 }
+
 </script>
 
 </body>
