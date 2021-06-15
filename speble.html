@@ -43,7 +43,7 @@ aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
     var IPos;
     var INeg;
 
-    function traitement() {
+    function traitement(v) {
         var driftPos = [];
         var driftNeg = [];
 
@@ -59,7 +59,7 @@ aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
         console.log(driftPos);
         console.log(driftNeg);
 
-        if (driftPos.length == 1) {
+        if (driftPos.length <= 2) {
             IPos = 0;
         } else {
             var sommePos = 0;
@@ -80,13 +80,38 @@ aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
         }
         
         document.getElementById("resulats").innerHTML = "IPos = " + Number.parseFloat(IPos).toPrecision(4) + " INeg = " 
-        + Number.parseFloat(INeg).toPrecision(4) + " Valeur actuelle = " + Number.parseFloat(prix[prix.length - 1]).toPrecision(4);
+        + Number.parseFloat(INeg).toPrecision(4) + " Valeur actuelle = " + Number.parseFloat(v).toPrecision(4);
     }
 
-    /*function conseil(v){
-        
+    function conseil(v){
+        var s;
 
-    }*/
+        if (v >= 1) {
+            s = "Vous êtes dans un drift positif";
+            if (v <= IPos) {
+                if (((v-1)/(IPos-1)) <= 0.5) {
+                    s += ", il est conseillé de vendre";
+                } else {
+                    s += ", il est fortement conseillé de vendre";
+                }
+            } else {
+                s += ", il faut vendre tout de suite";
+            }
+        } else {
+            s = "Vous êtes dans un drift négatif";
+            if (v >= INeg) {
+                if (((1-v)/(1-INeg) <= 0.5)) {
+                    s += ", il est conseillé d'acheter";
+                } else {
+                    s += ", il est fortement conseillé d'acheter";
+                }
+            } else {
+                s += ", il faut acheter tout de suite";
+            }
+        }
+        document.getElementById("conseils").innerHTML = s;
+    }
+
 //établir un coeff en fonction de la date (par exemple pour les 6 derniers mois l'intensité 
 //à un meilleur coeff)
 //ou alors établir en fonction du marketcap

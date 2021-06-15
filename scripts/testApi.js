@@ -8,10 +8,10 @@ async function getData(stable, t) {
   }
 }
 
-async function getActualValue() {
+async function getActualValue(stable) {
     try {
-      var response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ampleforth&vs_currencies=usd');
-      return response.data.ampleforth.usd;
+      var response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=' + stable + '&vs_currencies=usd');
+      return response.data[stable].usd;
     } catch (error) {
       console.error(error);
     }
@@ -24,7 +24,7 @@ var IsPos = [];
 var IsNeg = [];
 
 var c = true;
-//modif
+
 function requeteGecko() {
     var stable = document.getElementById("stableSelect").value;
     (async () => {
@@ -35,7 +35,7 @@ function requeteGecko() {
             IsPos = [];
             IsNeg = [];
 
-            var vActuelle = getActualValue();
+            var vActuelle = await getActualValue(stable);
             console.log('prix' + vActuelle);
 
             var durée = document.getElementsByName("durée");
@@ -48,8 +48,10 @@ function requeteGecko() {
             }
 
             var data = await getData(stable, t);
+
             save(data.prices, t);
-            traitement();
+            traitement(vActuelle);
+            conseil(vActuelle);
             intensiteArray();
             
             if(c) {

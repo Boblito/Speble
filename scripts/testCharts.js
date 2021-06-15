@@ -20,11 +20,12 @@ function dessiner(stable){
                 label: 'Valeur du ' + stable,
                 data: prix,
                 backgroundColor: [
-                    'rgba(44, 130, 201, 0)',
+                    'rgba(44, 130, 201, 0.2)',
                 ],
                 borderColor: [
                     'rgba(44, 130, 201, 1)',
                 ],
+                fill: '+1',
                 borderWidth: 1,
                 pointRadius: 0
             }, {
