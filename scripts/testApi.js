@@ -1,4 +1,3 @@
-
 async function getData(stable, t) {
   try {
     var response = await axios.get('https://api.coingecko.com/api/v3/coins/' + stable +'/market_chart?vs_currency=usd&days=' + t);
@@ -8,33 +7,72 @@ async function getData(stable, t) {
     console.error(error);
   }
 }
+
+async function getActualValue() {
+    try {
+      var response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ampleforth&vs_currencies=usd');
+      return response.data.ampleforth.usd;
+    } catch (error) {
+      console.error(error);
+    }
+}
+
 var dates = [];
 var prix = [];
 var vRef = [];
+var IsPos = [];
+var IsNeg = [];
+
+var c = true;
 
 function requeteGecko() {
     var stable = document.getElementById("stableSelect").value;
     (async () => {
-        if (stable != 'Nulle') {
+        if(stable != "Nulle") {
             dates = [];
             prix = [];
             vRef = [];
-            var durée = document.getElementsByName('durée');
+            IsPos = [];
+            IsNeg = [];
+
+            var vActuelle = getActualValue();
+            console.log('prix' + vActuelle);
+
+            var durée = document.getElementsByName("durée");
             var t;
-                for(var i = 0; i < durée.length; i++){
-                    if(durée[i].checked){
-                        t = durée[i].value;
-                    }
+
+            for(var i = 0; i < durée.length; i++){
+                if(durée[i].checked){
+                    t = durée[i].value;
                 }
+            }
+
             var data = await getData(stable, t);
             save(data.prices, t);
-            dessiner();
+            traitement();
+            intensiteArray();
+            
+            if(c) {
+                dessiner(stable);
+                c = false;
+            } else {
+                updateChart();
+            }
         }
     })();
 }
 
+function intensiteArray() {
+    for(let i in prix) {
+        IsPos.push(IPos);
+        IsNeg.push(INeg);
+    }
+        console.log(IsPos);
+        console.log(IsNeg);
+}
+
 function save(obj, t) {
-    for(var i in obj) {
+    for(let i in obj) {
         dates.push(formatDate(obj[i][0], t));
         prix.push(obj[i][1]);
         vRef.push(1);
