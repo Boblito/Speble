@@ -24,7 +24,7 @@ var IsPos = [];
 var IsNeg = [];
 
 var c = true;
-
+//modif
 function requeteGecko() {
     var stable = document.getElementById("stableSelect").value;
     (async () => {
