@@ -1,24 +1,24 @@
 var myChart;
 
 function updateChart() {
-    myChart.data.datasets[0].data = prix;
-    myChart.data.datasets[1].data = vRef;
-    myChart.data.datasets[2].data = IsPos;
-    myChart.data.datasets[3].data = IsNeg;
+    myChart.data.datasets[0].data = price;
+    myChart.data.datasets[1].data = refValue;
+    myChart.data.datasets[2].data = posIntensities;
+    myChart.data.datasets[3].data = negIntensities;
     myChart.data.labels = dates;
-    myChart.data.datasets[0].label = 'Valeur du ' + document.getElementById("stableSelect").value;
+    myChart.data.datasets[0].label = 'Value of ' + document.getElementById("stableSelect").value;
     myChart.update();
 }
 
 function dessiner(stable){
-    var ctx = document.getElementById('graphique').getContext('2d');
+    var ctx = document.getElementById('graph').getContext('2d');
     myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: dates,
             datasets: [{
-                label: 'Valeur du ' + stable,
-                data: prix,
+                label: 'Value of ' + stable,
+                data: price,
                 backgroundColor: [
                     'rgba(44, 130, 201, 0.2)',
                 ],
@@ -29,8 +29,8 @@ function dessiner(stable){
                 borderWidth: 1,
                 pointRadius: 0
             }, {
-                label: 'Valeur de référence',
-                data: vRef,
+                label: 'Reference value',
+                data: refValue,
                 backgroundColor: [
                     'rgba(0, 0, 0, 0)',
                 ],
@@ -40,8 +40,8 @@ function dessiner(stable){
                 borderWidth: 0.5,
                 pointRadius: 0
             }, {
-                label: 'Intensité positive',
-                data: IsPos,
+                label: 'Positive intensity',
+                data: posIntensities,
                 backgroundColor: [
                     'rgba(207, 0, 15, 0)',
                 ],
@@ -51,8 +51,8 @@ function dessiner(stable){
                 borderWidth: 0.5,
                 pointRadius: 0
             }, {
-                label: 'Intensité négative',
-                data: IsNeg,
+                label: 'Negative intensity',
+                data: negIntensities,
                 backgroundColor: [
                     'rgba(38, 166, 91, 0)',
                 ],

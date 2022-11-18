@@ -1,3 +1,16 @@
 body {
     background-color: lightblue;
 }
+
+h1 {
+    border-bottom: solid 3px black;
+    padding: 32px;
+    text-align: center;
+}
+
+.duration {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

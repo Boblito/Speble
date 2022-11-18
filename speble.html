@@ -7,29 +7,27 @@
 
 <h1>Speble</h1>
 
-<p id="resulats"></p>
+<p id="results"></p>
 
-<p id="conseils"></p>
+<p id="advices"></p>
 
-<select  id="stableSelect" onchange="requeteGecko()">
-    <option value="Nulle" selected disabled hidden>Choisis un stablecoin</option>
+<select id="stableSelect" onchange="geckoRequest()">
+    <option value="null" selected disabled hidden>Choose a stablecoin</option>
     <option value="ampleforth">Ampleforth</option>
-    <option value="xbtc">xBTC</option>
+    <option value="base-protocol">Base Protocol</option>
 </select>
 
-<div>
-    <input type="radio" id="radio1" name="durée" onchange="requeteGecko()" value="1" checked>
-    <label for="male">Jour</label><br>
-    <input type="radio" id="radio30" name="durée" onchange="requeteGecko()" value="30">
-    <label for="female">Mois</label><br>
-    <input type="radio" id="radio365" name="durée" onchange="requeteGecko()"value="365">
-    <label for="other">Année</label>
-    <input type="radio" id="radioTot" name="durée" onchange="requeteGecko()"value="10000">
-    <label for="other">Total</label>
+<div class="duration">
+    <input type="radio" id="radio30" name="duration" onchange="geckoRequest()" value="30" checked>
+    <label>Month</label><br>
+    <input type="radio" id="radio365" name="duration" onchange="geckoRequest()"value="365">
+    <label>Year</label>
+    <input type="radio" id="radioTot" name="duration" onchange="geckoRequest()"value="10000">
+    <label>Total</label>
 </div>
 
-<canvas id="graphique" width="400" height="100" 
-aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
+<canvas id="graph" width="400" height="100" 
+aria-label="Stablecoin value by date" role="img"></canvas>
 
 
 <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
@@ -40,81 +38,78 @@ aria-label="Valeur du stablecoin en fonction de la date" role="img"></canvas>
 
 <script>
 
-    var IPos;
-    var INeg;
+    var posIntensity;
+    var negIntensity;
 
-    function traitement(v) {
+    function driftCalculation(v) {
         var driftPos = [];
         var driftNeg = [];
 
-        for(let i in prix) {
-            if (prix[i] > 1) {
-                driftPos.push(prix[i]);
+        for(let i in price) {
+            if (price[i] > 1) {
+                driftPos.push(price[i]);
             }
-            if (prix[i] < 1) {
-                driftNeg.push(prix[i]);
+            if (price[i] < 1) {
+                driftNeg.push(price[i]);
             }
         }
 
         console.log(driftPos);
         console.log(driftNeg);
 
-        if (driftPos.length <= 2) {
-            IPos = 0;
+        if(driftPos.length <= 2) {
+            posIntensity = 0;
         } else {
-            var sommePos = 0;
+            var posSum = 0;
             for(let i = 0; i < driftPos.length; i++) {
-                sommePos += driftPos[i]; 
+                posSum += driftPos[i]; 
             }
-            IPos = sommePos/driftPos.length;
+            posIntensity = posSum/driftPos.length;
         }
 
-        if (driftNeg.length == 1) {
-            INeg = 0;
+        if(driftNeg.length == 1) {
+            negIntensity = 0;
         } else {
-            var sommeNeg = 0;
+            var negSum = 0;
             for(let i = 0; i < driftNeg.length; i++) {
-                sommeNeg += driftNeg[i]; 
+                negSum += driftNeg[i]; 
             }
-            INeg = sommeNeg/driftNeg.length;
+            negIntensity = negSum/driftNeg.length;
         }
         
-        document.getElementById("resulats").innerHTML = "IPos = " + Number.parseFloat(IPos).toPrecision(4) + " INeg = " 
-        + Number.parseFloat(INeg).toPrecision(4) + " Valeur actuelle = " + Number.parseFloat(v).toPrecision(4);
+        document.getElementById("results").innerHTML = "Positive Intensity = " + Number.parseFloat(posIntensity).toPrecision(4) + "<br>" + "Negative Intensity = " 
+        + Number.parseFloat(negIntensity).toPrecision(4) + "<br>" + " Actual Value = " + Number.parseFloat(v).toPrecision(4);
     }
 
-    function conseil(v){
+    function advice(v){
         var s;
 
-        if (v >= 1) {
-            s = "Vous êtes dans un drift positif";
-            if (v <= IPos) {
-                if (((v-1)/(IPos-1)) <= 0.5) {
-                    s += ", il est conseillé de vendre";
+        if(v >= 1) {
+            s = "You are in a positive drift";
+            if (v <= posIntensity) {
+                if(((v-1)/(posIntensity-1)) <= 0.5) {
+                    s += ", it is advisable to sell 📉";
                 } else {
-                    s += ", il est fortement conseillé de vendre";
+                    s += ", it is strongly advised to sell 📉";
                 }
             } else {
-                s += ", il faut vendre tout de suite";
+                s += ", it is necessary to sell immediately 📉";
             }
         } else {
-            s = "Vous êtes dans un drift négatif";
-            if (v >= INeg) {
-                if (((1-v)/(1-INeg) <= 0.5)) {
-                    s += ", il est conseillé d'acheter";
+            s = "You are in a negative drift";
+            if (v >= negIntensity) {
+                if (((1-v)/(1-negIntensity) <= 0.5)) {
+                    s += ", it is advisable to buy 📈";
                 } else {
-                    s += ", il est fortement conseillé d'acheter";
+                    s += ", it is strongly advised to buy 📈";
                 }
             } else {
-                s += ", il faut acheter tout de suite";
+                s += ", it is necessary to buy immediately 📈";
             }
         }
-        document.getElementById("conseils").innerHTML = s;
+        document.getElementById("advices").innerHTML = s;
     }
 
-//établir un coeff en fonction de la date (par exemple pour les 6 derniers mois l'intensité 
-//à un meilleur coeff)
-//ou alors établir en fonction du marketcap
 </script>
 
 </body>

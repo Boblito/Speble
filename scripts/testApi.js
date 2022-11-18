@@ -1,6 +1,6 @@
 async function getData(stable, t) {
   try {
-    var response = await axios.get('https://api.coingecko.com/api/v3/coins/' + stable +'/market_chart?vs_currency=usd&days=' + t);
+    var response = await axios.get('https://api.coingecko.com/api/v3/coins/' + stable + '/market_chart?vs_currency=usd&days=' + t);
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -18,45 +18,45 @@ async function getActualValue(stable) {
 }
 
 var dates = [];
-var prix = [];
-var vRef = [];
-var IsPos = [];
-var IsNeg = [];
+var price = [];
+var refValue = []; //ici
+var posIntensities = [];
+var negIntensities = [];
 
-var c = true;
+var notDrawn = true;
 
-function requeteGecko() {
+function geckoRequest() {
     var stable = document.getElementById("stableSelect").value;
     (async () => {
-        if(stable != "Nulle") {
+        if(stable != "null") {
             dates = [];
-            prix = [];
-            vRef = [];
-            IsPos = [];
-            IsNeg = [];
+            price = [];
+            refValue = [];
+            posIntensities = [];
+            negIntensities = [];
 
-            var vActuelle = await getActualValue(stable);
-            console.log('prix' + vActuelle);
+            var actualValue = await getActualValue(stable);
+            console.log('price' + actualValue);
 
-            var durée = document.getElementsByName("durée");
+            var duration = document.getElementsByName("duration");
             var t;
 
-            for(var i = 0; i < durée.length; i++){
-                if(durée[i].checked){
-                    t = durée[i].value;
+            for(var i = 0; i < duration.length; i++) {
+                if(duration[i].checked) {
+                    t = duration[i].value;
                 }
             }
 
             var data = await getData(stable, t);
 
             save(data.prices, t);
-            traitement(vActuelle);
-            conseil(vActuelle);
-            intensiteArray();
+            driftCalculation(actualValue);
+            advice(actualValue);
+            intensitiesArray();
             
-            if(c) {
+            if(notDrawn) {
                 dessiner(stable);
-                c = false;
+                notDrawn = false;
             } else {
                 updateChart();
             }
@@ -64,27 +64,27 @@ function requeteGecko() {
     })();
 }
 
-function intensiteArray() {
-    for(let i in prix) {
-        IsPos.push(IPos);
-        IsNeg.push(INeg);
+function intensitiesArray() {
+    for(let i in price) {
+        posIntensities.push(posIntensity);
+        negIntensities.push(negIntensity);
     }
-        console.log(IsPos);
-        console.log(IsNeg);
+        console.log(posIntensities);
+        console.log(negIntensities);
 }
 
 function save(obj, t) {
     for(let i in obj) {
         dates.push(formatDate(obj[i][0], t));
-        prix.push(obj[i][1]);
-        vRef.push(1);
+        price.push(obj[i][1]);
+        refValue.push(1);
     }
 };
 
 function formatDate(date, t) {
 
-    const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
 
     var d = new Date(date),     
         minute = d.getMinutes(),
@@ -105,7 +105,7 @@ function formatDate(date, t) {
 
     if(t <= 1) {
         return [hour, minute].join(':');
-    } else if ((t > 1) && (t <= 90))  { 
+    } else if((t > 1) && (t <= 90))  { 
         return [monthNames[month], day, hour + 'h'].join('-');
     } else {
         return [year, monthNames[month], day].join('-');
@@ -113,4 +113,4 @@ function formatDate(date, t) {
 }
 
 console.log(dates);
-console.log(prix);
+console.log(price);
