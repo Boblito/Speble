@@ -1,5 +1,0 @@
-aire des drifts couleur
-changer l'intensité en global
-apparence du site général
-simulation à faire
-algo intensité à améliorer
